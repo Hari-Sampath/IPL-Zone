@@ -1,66 +1,22 @@
-You are absolutely right, I completely missed the single-player lookup endpoint! Good catch. If a user clicks on "Virat Kohli" in your Next.js frontend, the UI needs a way to fetch just his specific stats without downloading the entire database again.
-
-Let's fix that Controller missing piece right now, and then I have drafted a professional, full-stack `README.md` for your GitHub repository that includes your SQL database fix.
-
-### 1. The Missing Controller Endpoint
-
-First, add this quick method to your `PlayerService.java` so it knows how to pull a single player:
-
-```java
-    // Add this to PlayerService.java
-    public Player getPlayerByName(String playerName) {
-        return playerRepository.findById(playerName)
-                .orElseThrow(() -> new RuntimeException("Player " + playerName + " not found!"));
-    }
-
-```
-
-Next, add this exact block to your `PlayerController.java` right below your other `@GetMapping`:
-
-```java
-    // Add this to PlayerController.java
-    // READ: Get a specific player by their exact name
-    // Test URL: GET http://localhost:8080/api/player/Abhishek Sharma
-    @GetMapping(path = "{playerName}")
-    public ResponseEntity<Player> getPlayerByName(@PathVariable("playerName") String playerName) {
-        Player player = playerService.getPlayerByName(playerName);
-        return new ResponseEntity<>(player, HttpStatus.OK);
-    }
-
-```
-
-*(Make sure to restart Spring Boot after adding this!)*
-
----
-
-### 2. Your Project README.md
-
-Here is a comprehensive, professional README for your repository. It outlines your three-phase architecture, the tech stack, the API routes, and critically, it includes a dedicated "Troubleshooting/Data Fix" section for that SQL script.
-
-Copy and paste everything below this line into a file named `README.md` in the root of your project:
 
 ```markdown
-# 🏏 IPL Zone (Full-Stack Cricket Analytics Platform)
+# 🏏 IPL Zone (REST API Backend)
 
-IPL Zone is a modern, comprehensive web application built to serve Indian Premier League (IPL) cricket statistics, fantasy cricket analysis, and player leaderboards. Inspired by top-tier sports analytics dashboards, it features a robust data pipeline, a Java Spring Boot REST API, and an upcoming premium UI.
+IPL Zone is a modern Java Spring Boot REST API built to serve Indian Premier League (IPL) cricket statistics, fantasy cricket analysis, and player leaderboards. This backend handles dynamic data querying and enforces clean business logic for sports statistics.
 
 ## 🚀 Project Architecture
 
-This project is built in three distinct phases:
+This repository is powered by two core components:
 
-### Phase 1: Data ETL Pipeline (Complete)
+### 1. Data ETL Pipeline (Data Source)
 * **Tech Stack:** Python, Selenium, BeautifulSoup, Pandas
 * **Process:** Semi-automated web scraping of IPL 2026 batting and bowling data. The pipeline merges datasets, handles column collisions, and formats the data for relational storage.
 * **Storage:** PostgreSQL (`ipl_database`)
 
-### Phase 2: REST API Backend (Current)
+### 2. REST API (Core Application)
 * **Tech Stack:** Java 17, Spring Boot, Spring Data JPA, Hibernate, Maven
 * **Architecture:** Layered architecture utilizing Controllers, Services, and Repositories to enforce clean business logic and data access separation.
-* **Features:** Full CRUD operations for player statistics, dynamic querying, and null-value handling for specialized sports stats (e.g., bowlers without batting data).
-
-### Phase 3: Frontend Web Client (Upcoming)
-* **Tech Stack:** Next.js (App Router), React 18, Tailwind CSS, Framer Motion, Recharts
-* **Design:** Premium dark mode UI with glassmorphism, dynamic data tables, and interactive visual analytics.
+* **Features:** Full CRUD operations for player statistics, dynamic SQL querying (by team and partial name match), and wrapper-class null-value handling for specialized sports stats (e.g., bowlers without batting data).
 
 ---
 
@@ -114,14 +70,14 @@ WHERE team IS NULL;
 
 Base URL: `http://localhost:8080/api/player`
 
-| Method | Endpoint                        | Description |
-| --- |---------------------------------| --- |
-| `GET` | `/api/player`                   | Fetch all IPL players |
-| `GET` | `/api/player?team={teamName}`   | Fetch all players for a specific team (e.g., RCB) |
-| `GET` | `/api/player?name={playername}` | Fetch statistics for a specific player |
-| `POST` | `/api/player`                   | Create a new player record (JSON body required) |
-| `PUT` | `/api/player`                   | Update an existing player's stats (JSON body required) |
-| `DELETE` | `/api/player/{playerName}`      | Delete a player record from the database |
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/api/player` | Fetch all IPL players |
+| `GET` | `/api/player?team={teamName}` | Fetch all players for a specific team (e.g., RCB) |
+| `GET` | `/api/player?name={playername}` | Fetch statistics for a specific player (partial match) |
+| `POST` | `/api/player` | Create a new player record (JSON body required) |
+| `PUT` | `/api/player` | Update an existing player's stats (JSON body required) |
+| `DELETE` | `/api/player/{playerName}` | Delete a player record from the database |
 
 ```
 
