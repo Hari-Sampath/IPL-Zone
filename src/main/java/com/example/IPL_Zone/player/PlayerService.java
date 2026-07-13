@@ -54,4 +54,7 @@ public class PlayerService {
         return playerRepository.save(updatedPlayer);
     }
 
+    public List<Player> getPlayersFromName(String name) {
+        return playerRepository.findByPlayerContainingIgnoreCase(name);
+    }
 }

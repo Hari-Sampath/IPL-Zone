@@ -18,12 +18,15 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    // 1. READ: Get all players OR filter by team
+    // 1. READ: Get all players OR filter by team OR filter by player name
     // Test URLs: GET http://localhost:8080/api/player  OR  GET http://localhost:8080/api/player?team=RCB
     @GetMapping
-    public List<Player> getPlayers(@RequestParam(required = false) String team) {
+    public List<Player> getPlayers(@RequestParam(required = false) String team, @RequestParam(required = false) String name) {
         if (team != null && !team.trim().isEmpty()) {
             return playerService.getPlayersFromTeams(team); // Calls your custom team search
+        }
+        if (name != null && !name.trim().isEmpty()) {
+            return playerService.getPlayersFromName(name); // Calls your custom team search
         }
         return playerService.getPlayers(); // Calls the built-in findAll
     }
