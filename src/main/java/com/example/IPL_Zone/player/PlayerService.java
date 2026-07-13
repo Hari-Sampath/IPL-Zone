@@ -1,5 +1,6 @@
 package com.example.IPL_Zone.player;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service; // Use @Service instead of @Component for clarity
 
@@ -26,6 +27,7 @@ public class PlayerService {
         return playerRepository.findByTeam(team); // Calling your custom interface method
     }
 
+    @Transactional
     public void deletePlayer(String playerName) {
         playerRepository.deleteById(playerName);
     }
