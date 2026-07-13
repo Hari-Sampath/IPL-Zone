@@ -121,4 +121,8 @@ public class Player {
     public void setPlayer(String player) {
         this.player = player;
     }
+
+    public Player() {
+        // Hibernate needs this empty constructor to build the object from the database
+    }
 }
