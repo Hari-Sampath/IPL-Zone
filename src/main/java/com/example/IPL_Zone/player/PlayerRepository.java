@@ -1,13 +1,13 @@
 package com.example.IPL_Zone.player;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import java.util.Optional;
-
-@Repository
 public interface PlayerRepository extends JpaRepository<Player, String> {
-    void deleteByPlayer(String player);
 
-    Optional findPlayerByPlayer(String name);
+    // You ONLY need to add this one!
+    // Spring Boot magically writes the SQL: SELECT * FROM player_stats_2026 WHERE team = ?
+    List<Player> findByTeam(String team);
+
+    // Delete and Find by Player name are already built-in as deleteById() and findById()
 }
